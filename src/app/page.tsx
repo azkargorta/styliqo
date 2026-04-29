@@ -16,22 +16,22 @@ export default function Home() {
                 Tu armario virtual para guardar ropa, montar looks y planificar qué ponerte.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-300">
-                Organiza prendas, crea outfits, agenda combinaciones en tu calendario
-                y desbloquea recomendaciones premium con IA cuando quieras escalar la experiencia.
+                Organiza prendas, crea conjuntos, agenda combinaciones en tu calendario
+                y desbloquea el asistente personal premium cuando quieras escalar la experiencia.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/dashboard"
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand800"
                 >
-                  Ver dashboard
+                  Ver resumen
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/premium"
                   className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  Explorar premium
+                  Abrir asistente personal
                 </Link>
               </div>
             </div>
@@ -39,9 +39,9 @@ export default function Home() {
             <div className="grid gap-4 rounded-[1.75rem] bg-white/8 p-4">
               {[
                 { label: "Prendas organizadas", value: "128" },
-                { label: "Outfits guardados", value: "36" },
+                { label: "Conjuntos guardados", value: "36" },
                 { label: "Looks planificados", value: "12 este mes" },
-                { label: "IA premium", value: "30 sugerencias al mes" },
+                { label: "Asistente personal", value: "30 sugerencias al mes" },
               ].map((item) => (
                 <div key={item.label} className="rounded-3xl border border-white/10 bg-white/6 p-5">
                   <p className="text-sm text-stone-300">{item.label}</p>
@@ -61,9 +61,9 @@ export default function Home() {
             <div className="grid gap-4 sm:grid-cols-2">
               {[
                 { label: "Armario", icon: Shirt, text: "Catálogo de ropa con fotos, atributos y favoritos." },
-                { label: "Outfits", icon: Sparkles, text: "Combinaciones manuales y sugeridas." },
-                { label: "Planner", icon: CalendarDays, text: "Planificación diaria de looks." },
-                { label: "Wishlist", icon: Heart, text: "Prendas deseadas con prioridad y precio objetivo." },
+                { label: "Conjuntos", icon: Sparkles, text: "Combinaciones manuales y sugeridas." },
+                { label: "Planificador", icon: CalendarDays, text: "Planificación diaria de looks." },
+                { label: "Lista de deseos", icon: Heart, text: "Prendas deseadas con prioridad y precio objetivo." },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
@@ -80,14 +80,14 @@ export default function Home() {
           <SectionCard
             eyebrow="Monetización"
             title="Premium diseñado para crecer"
-            description="La versión premium se apoya en control de acceso por servidor, checkout de Stripe y recomendaciones con IA desacopladas del proveedor."
+            description="La versión premium se apoya en control de acceso por servidor, checkout de Stripe y un asistente personal desacoplado del proveedor."
           >
             <div className="space-y-4">
               {[
                 "Checkout preparado para Stripe Checkout y Customer Portal.",
-                "Registro de suscripción, consumo IA y limites por usuario.",
+                "Registro de suscripción, consumo del asistente y límites por usuario.",
                 "Fallbacks seguros si todavía no se han definido las variables de entorno.",
-                "Capa de IA lista para cambiar de proveedor sin rehacer la interfaz.",
+                "Capa del asistente lista para cambiar de proveedor sin rehacer la interfaz.",
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-3xl bg-stone-100 p-4">
                   <ShieldCheck className="mt-0.5 h-5 w-5 text-stone-700" />

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Styliqo",
   description:
-    "Armario virtual personal para organizar ropa, crear outfits, planificar looks y acceder a recomendaciones premium con IA.",
+    "Armario virtual personal para organizar ropa, crear conjuntos, planificar looks y acceder al asistente personal premium.",
 };
 
 export default function RootLayout({

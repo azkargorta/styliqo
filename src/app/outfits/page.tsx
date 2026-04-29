@@ -6,8 +6,8 @@ import { garments, outfits } from "@/lib/mock-data";
 export default function OutfitsPage() {
   return (
     <AppShell
-      title="Outfits"
-      description="Constructor de looks manuales y base preparada para guardar sugerencias generadas con IA como outfits editables."
+      title="Conjuntos"
+      description="Constructor de looks manuales y base preparada para guardar sugerencias del asistente personal como conjuntos editables."
     >
       <div className="grid gap-6 xl:grid-cols-[1fr_0.95fr]">
         <SectionCard
@@ -29,8 +29,8 @@ export default function OutfitsPage() {
 
         <SectionCard
           eyebrow="Biblioteca"
-          title="Outfits guardados"
-          description="Cada outfit agrupa prendas, contexto de uso y notas para poder planificarse después en el calendario."
+          title="Conjuntos guardados"
+          description="Cada conjunto agrupa prendas, contexto de uso y notas para poder planificarse después en el calendario."
         >
           {outfits.length ? (
             <div className="space-y-4">
@@ -65,8 +65,8 @@ export default function OutfitsPage() {
             </div>
           ) : (
             <EmptyState
-              title="Aún no has creado outfits"
-              description="Selecciona prendas del armario y guarda tu primera combinación para poder reutilizarla en el planner."
+              title="Aún no has creado conjuntos"
+              description="Selecciona prendas del armario y guarda tu primera combinación para poder reutilizarla en el planificador."
             />
           )}
         </SectionCard>

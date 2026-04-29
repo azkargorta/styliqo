@@ -67,7 +67,7 @@ export default async function WardrobePage() {
         <SectionCard
           eyebrow="Supabase"
           title="Añade tus primeras prendas"
-          description="Este formulario guarda tu prenda en la BD. Con al menos 1 prenda, la IA premium podrá generar looks basados en tus IDs."
+          description="Este formulario guarda tu prenda en la BD. Con al menos 1 prenda, el asistente personal premium podrá generar conjuntos basados en tus IDs."
         >
           <GarmentForm />
         </SectionCard>

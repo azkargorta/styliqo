@@ -6,7 +6,7 @@ import { wishlistItems } from "@/lib/mock-data";
 export default function WishlistPage() {
   return (
     <AppShell
-      title="Wishlist"
+      title="Lista de deseos"
       description="Lista de compra futura para detectar gaps del armario y convertir deseos en prendas reales cuando tenga sentido."
     >
       <div className="grid gap-6">

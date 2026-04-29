@@ -21,7 +21,7 @@ export function AppShell({
           <header className="mb-8 flex flex-col gap-4 border-b border-border pb-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
-                Workspace
+                Espacio
               </p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-stone-950">
                 {title}
@@ -31,15 +31,15 @@ export function AppShell({
               </p>
             </div>
             <div className="rounded-2xl border border-border bg-surface px-4 py-3 text-sm text-stone-600">
-              Prioridad: completar armario y generar outfits con IA.
+              Prioridad: completar armario y generar conjuntos con tu asistente personal.
             </div>
           </header>
           {children}
           <footer className="mt-10 flex flex-col gap-3 border-t border-border pt-6 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
             <p>Styliqo · armario virtual personal</p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/onboarding">Onboarding</Link>
-              <Link href="/pricing">Pricing</Link>
+              <Link href="/onboarding">Primeros pasos</Link>
+              <Link href="/pricing">Precios</Link>
               <Link href="/legal/privacy">Privacidad</Link>
               <Link href="/legal/terms">Términos</Link>
             </div>

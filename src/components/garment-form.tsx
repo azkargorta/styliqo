@@ -103,7 +103,7 @@ export function GarmentForm() {
             <h2 className="text-lg font-semibold text-stone-900">Añadir prenda</h2>
           </div>
           <p className="mt-2 text-sm text-stone-600">
-            Para que la IA funcione, necesitamos al menos 1 prenda en tu armario.
+            Para que el asistente personal funcione, necesitamos al menos 1 prenda en tu armario.
           </p>
         </div>
         <div className="rounded-3xl bg-stone-100 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-stone-600">

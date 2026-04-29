@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Necesitas añadir al menos 1 prenda en `Armario` antes de generar con IA.",
+            "Necesitas añadir al menos 1 prenda en `Armario` antes de usar el asistente personal.",
         },
         { status: 400 },
       );

@@ -15,12 +15,12 @@ import { profile } from "@/lib/mock-data";
 import { StyliqoLogoMark } from "@/components/brand/logo";
 
 const navigation = [
-  { href: "/dashboard", label: "Dashboard", icon: Layers3 },
+  { href: "/dashboard", label: "Resumen", icon: Layers3 },
   { href: "/wardrobe", label: "Armario", icon: Shirt },
-  { href: "/outfits", label: "Outfits", icon: Sparkles },
-  { href: "/planner", label: "Planner", icon: CalendarDays },
-  { href: "/wishlist", label: "Wishlist", icon: Heart },
-  { href: "/premium", label: "Premium", icon: CreditCard },
+  { href: "/outfits", label: "Conjuntos", icon: Sparkles },
+  { href: "/planner", label: "Planificador", icon: CalendarDays },
+  { href: "/wishlist", label: "Lista de deseos", icon: Heart },
+  { href: "/premium", label: "Asistente personal", icon: CreditCard },
 ];
 
 export function SidebarNav() {
@@ -35,7 +35,7 @@ export function SidebarNav() {
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-stone-950">Styliqo</p>
           <p className="truncate text-xs text-stone-500">
-            Tu armario, outfits y planner
+            Tu armario, conjuntos y planificador
           </p>
         </div>
       </Link>
@@ -50,7 +50,7 @@ export function SidebarNav() {
           <span className="font-semibold text-white">
             {profile.monthlyAiCredits - profile.usedAiCredits}
           </span>{" "}
-          creditos IA
+          créditos del asistente
         </p>
       </div>
 
@@ -84,10 +84,10 @@ export function SidebarNav() {
       </nav>
 
       <div className="mt-6 rounded-3xl bg-surfaceMuted p-4 text-sm text-stone-700">
-        <p className="font-semibold text-stone-900">Tip rápido</p>
+        <p className="font-semibold text-stone-900">Consejo rápido</p>
         <p className="mt-2 leading-6 text-stone-600">
           Empieza por <span className="font-semibold">Armario</span> y luego
-          genera en <span className="font-semibold">Premium</span>.
+          genera en <span className="font-semibold">Asistente personal</span>.
         </p>
       </div>
     </aside>

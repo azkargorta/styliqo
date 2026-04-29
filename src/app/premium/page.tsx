@@ -16,14 +16,14 @@ export default async function PremiumPage() {
 
   return (
     <AppShell
-      title="Premium e IA"
-      description="Panel de monetización, control de consumo y sugerencias premium preparado para conectarse a Stripe y a un proveedor IA real."
+      title="Asistente personal"
+      description="Panel premium para generar conjuntos, controlar consumo y preparar la suscripción con Stripe."
     >
       <div className="grid gap-6">
         <section className="grid gap-4 lg:grid-cols-3">
           {[
             { label: "Plan activo", value: "Premium" },
-            { label: "Creditos restantes", value: remainingCredits.toString() },
+            { label: "Créditos del asistente", value: remainingCredits.toString() },
             { label: "Límite mensual", value: profile.monthlyAiCredits.toString() },
           ].map((item) => (
             <div key={item.label} className="rounded-3xl border border-stone-200 bg-white p-5">
@@ -42,7 +42,7 @@ export default async function PremiumPage() {
             <div className="rounded-3xl bg-stone-900 p-5 text-white">
               <p className="text-sm text-stone-300">Incluye</p>
               <ul className="mt-4 space-y-3 text-sm leading-6 text-stone-200">
-                <li>Generación de looks con IA</li>
+                <li>Generación de conjuntos con asistente personal</li>
                 <li>Historial de recomendaciones</li>
                 <li>Límites mensuales configurables</li>
                 <li>Preparado para portal de cliente y facturación</li>
@@ -59,9 +59,9 @@ export default async function PremiumPage() {
         </SectionCard>
 
         <SectionCard
-          eyebrow="IA"
+          eyebrow="Asistente personal"
           title="Sugerencias generadas"
-          description="La capa de IA devuelve looks explicados y convertibles a outfits guardables. Hoy usa un proveedor local de ejemplo para no depender de claves durante el bootstrap."
+          description="El asistente personal devuelve conjuntos explicados y convertibles a conjuntos guardables."
         >
           <AiGenerator />
         </SectionCard>

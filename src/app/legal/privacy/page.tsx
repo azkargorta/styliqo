@@ -11,15 +11,15 @@ export default function PrivacyPage() {
         >
           <div className="space-y-6 text-sm leading-7 text-stone-700">
             <p>
-              Styliqo almacena información de cuenta, prendas, imágenes, outfits,
-              elementos del planner, wishlist y eventos relacionados con suscripción.
+              Styliqo almacena información de cuenta, prendas, imágenes, conjuntos,
+              elementos del planificador, lista de deseos y eventos relacionados con suscripción.
             </p>
             <p>
               Las imágenes subidas por el usuario se destinan exclusivamente a la
               prestación del servicio y a futuras funciones de etiquetado y recomendación.
             </p>
             <p>
-              Si se activan funciones premium con IA, podrán procesarse metadatos del armario
+              Si se activan funciones premium del asistente personal, podrán procesarse metadatos del armario
               y contexto de uso para devolver sugerencias de conjuntos.
             </p>
           </div>

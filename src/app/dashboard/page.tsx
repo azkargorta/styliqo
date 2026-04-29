@@ -8,17 +8,17 @@ export default function DashboardPage() {
 
   return (
     <AppShell
-      title="Dashboard"
-      description="Resumen operativo de tu armario, actividad de outfits, planificación semanal y capacidad premium."
+      title="Resumen"
+      description="Resumen operativo de tu armario, actividad de conjuntos, planificación semanal y capacidad premium."
     >
       <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="grid gap-6">
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[
               { label: "Prendas", value: garments.length.toString() },
-              { label: "Outfits", value: outfits.length.toString() },
+                { label: "Conjuntos", value: outfits.length.toString() },
               { label: "Eventos planificados", value: plannerEntries.length.toString() },
-              { label: "Creditos IA", value: `${remainingCredits} restantes` },
+                { label: "Créditos del asistente", value: `${remainingCredits} restantes` },
             ].map((item) => (
               <div key={item.label} className="rounded-3xl border border-stone-200 bg-white p-5">
                 <p className="text-sm text-stone-500">{item.label}</p>
@@ -46,9 +46,9 @@ export default function DashboardPage() {
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 {[
                   { href: "/wardrobe", label: "Añadir prenda" },
-                  { href: "/outfits", label: "Crear outfit" },
+                  { href: "/outfits", label: "Crear conjunto" },
                   { href: "/planner", label: "Planificar semana" },
-                  { href: "/premium", label: "Generar con IA" },
+                  { href: "/premium", label: "Generar con asistente" },
                 ].map((item) => (
                   <Link
                     key={item.href}
@@ -66,7 +66,7 @@ export default function DashboardPage() {
         <div className="grid gap-6">
           <SectionCard
             eyebrow="Guardado"
-            title="Wishlist activa"
+            title="Lista de deseos"
             description="Prioriza futuras compras para detectar huecos en tu armario."
           >
             <div className="space-y-3">
@@ -95,7 +95,7 @@ export default function DashboardPage() {
               <p className="text-sm text-stone-300">Plan actual</p>
               <p className="mt-2 text-2xl font-semibold capitalize">{profile.tier}</p>
               <p className="mt-3 text-sm leading-6 text-stone-300">
-                Puedes usar recomendaciones IA, histórico de generación y futuras funciones
+                Puedes usar el asistente personal, histórico de generación y futuras funciones
                 avanzadas sin cambiar la estructura principal de la app.
               </p>
             </div>

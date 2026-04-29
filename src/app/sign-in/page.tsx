@@ -81,7 +81,7 @@ export default function SignInPage() {
         <SectionCard
           eyebrow="Acceso"
           title="Entra en Styliqo"
-          description="Usa tu cuenta de Supabase para que el armario y la IA premium trabajen con tus datos reales."
+          description="Usa tu cuenta de Supabase para que el armario y el asistente personal trabajen con tus datos reales."
         >
           <div className="flex gap-3">
             <button

@@ -61,7 +61,7 @@ export function AiGenerator() {
           <div className="flex items-center gap-3">
             <Sparkles className="h-5 w-5 text-stone-900" />
             <h2 className="text-lg font-semibold text-stone-900">
-              Generar conjunto con IA
+              Generar conjunto con tu asistente personal
             </h2>
           </div>
           <p className="mt-2 text-sm text-stone-600">
@@ -136,7 +136,7 @@ export function AiGenerator() {
           {loading ? "Generando..." : "Generar"}
         </button>
         <p className="text-sm text-stone-500">
-          Si te aparece un error, añade al menos 1 prenda en `Armario` antes de generar.
+          Si te aparece un error, añade al menos 1 prenda en `Armario` antes de usar el asistente.
         </p>
       </div>
 
