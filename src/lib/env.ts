@@ -10,7 +10,7 @@ export const env = {
   stripeSecretKey: readEnv("STRIPE_SECRET_KEY"),
   stripePriceId: readEnv("STRIPE_PREMIUM_PRICE_ID"),
   geminiApiKey: readEnv("GEMINI_API_KEY"),
-  geminiModel: readEnv("GEMINI_MODEL") ?? "gemini-1.5-flash",
+  geminiModel: readEnv("GEMINI_MODEL") ?? "gemini-2.0-flash",
 };
 
 export function hasSupabaseEnv() {
