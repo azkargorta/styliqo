@@ -154,63 +154,125 @@ export function PlannerCalendar({
         </div>
       </div>
 
-      <div className={clsx("mt-6 grid gap-3", mode === "week" ? "md:grid-cols-7" : "md:grid-cols-1")}>
-        {days.map((day) => {
-          const key = isoDate(day);
-          const dayEntries = entriesByDate.get(key) ?? [];
+      {mode === "week" ? (
+        <div className="mt-6 -mx-2 overflow-x-auto px-2">
+          <div className="grid min-w-[980px] grid-cols-7 gap-3">
+            {days.map((day) => {
+              const key = isoDate(day);
+              const dayEntries = entriesByDate.get(key) ?? [];
 
-          return (
-            <div key={key} className="rounded-[1.25rem] border border-border bg-surfaceMuted p-4">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-                    {format(day, "EEE", { locale: es })}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-stone-950">
-                    {format(day, "d MMM", { locale: es })}
-                  </p>
+              return (
+                <div key={key} className="rounded-[1.25rem] border border-border bg-surfaceMuted p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+                        {format(day, "EEE", { locale: es })}
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-stone-950">
+                        {format(day, "d MMM", { locale: es })}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenDate(key);
+                        setTitle("");
+                        setSelectedOutfitId("");
+                        setError(null);
+                      }}
+                      className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-semibold text-stone-900 transition hover:bg-stone-100"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span className="hidden lg:inline">Añadir</span>
+                    </button>
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    {dayEntries.length ? (
+                      dayEntries.map((entry) => {
+                        const outfitName = entry.outfit_id
+                          ? outfits.find((o) => o.id === entry.outfit_id)?.name
+                          : null;
+
+                        return (
+                          <div key={entry.id} className="rounded-2xl bg-white p-3">
+                            <p className="text-sm font-semibold text-stone-900">
+                              {entry.title}
+                            </p>
+                            <p className="mt-1 text-xs text-stone-500">
+                              {outfitName ? `Conjunto: ${outfitName}` : "Sin conjunto asignado"}
+                            </p>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p className="text-sm text-stone-500">Sin eventos</p>
+                    )}
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOpenDate(key);
-                    setTitle("");
-                    setSelectedOutfitId("");
-                    setError(null);
-                  }}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-semibold text-stone-900 transition hover:bg-stone-100"
-                >
-                  <Plus className="h-4 w-4" />
-                  Añadir
-                </button>
-              </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-3">
+          {days.map((day) => {
+            const key = isoDate(day);
+            const dayEntries = entriesByDate.get(key) ?? [];
 
-              <div className="mt-4 space-y-2">
-                {dayEntries.length ? (
-                  dayEntries.map((entry) => {
-                    const outfitName = entry.outfit_id
-                      ? outfits.find((o) => o.id === entry.outfit_id)?.name
-                      : null;
+            return (
+              <div key={key} className="rounded-[1.25rem] border border-border bg-surfaceMuted p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
+                      {format(day, "EEEE", { locale: es })}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-stone-950">
+                      {format(day, "d MMMM", { locale: es })}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpenDate(key);
+                      setTitle("");
+                      setSelectedOutfitId("");
+                      setError(null);
+                    }}
+                    className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-semibold text-stone-900 transition hover:bg-stone-100"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Añadir
+                  </button>
+                </div>
 
-                    return (
-                      <div key={entry.id} className="rounded-2xl bg-white p-3">
-                        <p className="text-sm font-semibold text-stone-900">
-                          {entry.title}
-                        </p>
-                        <p className="mt-1 text-xs text-stone-500">
-                          {outfitName ? `Conjunto: ${outfitName}` : "Sin conjunto asignado"}
-                        </p>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-sm text-stone-500">Sin eventos</p>
-                )}
+                <div className="mt-4 space-y-2">
+                  {dayEntries.length ? (
+                    dayEntries.map((entry) => {
+                      const outfitName = entry.outfit_id
+                        ? outfits.find((o) => o.id === entry.outfit_id)?.name
+                        : null;
+
+                      return (
+                        <div key={entry.id} className="rounded-2xl bg-white p-3">
+                          <p className="text-sm font-semibold text-stone-900">
+                            {entry.title}
+                          </p>
+                          <p className="mt-1 text-xs text-stone-500">
+                            {outfitName ? `Conjunto: ${outfitName}` : "Sin conjunto asignado"}
+                          </p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-sm text-stone-500">Sin eventos</p>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {openDate ? (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/35 px-4">

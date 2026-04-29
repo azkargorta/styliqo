@@ -179,7 +179,7 @@ export default function DashboardPage() {
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 <Link
                   href="/planner"
-                  className="inline-flex items-center justify-center rounded-full bg-stone-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-stone-800"
+                  className="inline-flex items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand800"
                 >
                   Planificar ahora
                 </Link>
