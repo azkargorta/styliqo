@@ -1,18 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import type { Season, Occasion } from "@/types/domain";
 
 const categories = ["tops", "bottoms", "outerwear", "footwear", "accessories"] as const;
 const seasons = ["spring", "summer", "autumn", "winter"] as const;
 const occasions = ["daily", "office", "event", "travel", "sport"] as const;
 
+const categoryLabels: Record<(typeof categories)[number], string> = {
+  tops: "Tops",
+  bottoms: "Pantalones",
+  outerwear: "Abrigos",
+  footwear: "Calzado",
+  accessories: "Accesorios",
+};
+
+const seasonLabels: Record<Season, string> = {
+  spring: "Primavera",
+  summer: "Verano",
+  autumn: "Otoño",
+  winter: "Invierno",
+};
+
+const occasionLabels: Record<Occasion, string> = {
+  daily: "Diario",
+  office: "Oficina",
+  event: "Evento",
+  travel: "Viaje",
+  sport: "Deporte",
+};
+
 export function GarmentForm() {
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState<(typeof categories)[number]>("tops");
-  const [color, setColor] = useState("");
+  const [colors, setColors] = useState<string[]>([]);
+  const [colorInput, setColorInput] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [notes, setNotes] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -27,6 +51,17 @@ export function GarmentForm() {
     else setList([...list, value]);
   }
 
+  function addColor(raw: string) {
+    const value = raw.trim().replace(/\s+/g, " ");
+    if (!value) return;
+    if (colors.some((c) => c.toLowerCase() === value.toLowerCase())) return;
+    setColors((prev) => [...prev, value]);
+  }
+
+  function removeColor(value: string) {
+    setColors((prev) => prev.filter((c) => c !== value));
+  }
+
   async function onSubmit() {
     setMessage(null);
     setLoading(true);
@@ -35,7 +70,12 @@ export function GarmentForm() {
       const form = new FormData();
       form.set("name", name);
       form.set("category", category);
-      form.set("color", color.trim());
+      const normalizedColors = colors.length
+        ? colors
+        : colorInput.trim()
+          ? [colorInput.trim()]
+          : [];
+      form.set("color", normalizedColors.join(", "));
       if (brand.trim()) form.set("brand", brand.trim());
       if (notes.trim()) form.set("notes", notes.trim());
       form.set("isFavorite", String(isFavorite));
@@ -56,7 +96,8 @@ export function GarmentForm() {
 
       setName("");
       setBrand("");
-      setColor("");
+      setColors([]);
+      setColorInput("");
       setPhoto(null);
       setNotes("");
       setIsFavorite(false);
@@ -147,20 +188,62 @@ export function GarmentForm() {
           >
             {categories.map((c) => (
               <option key={c} value={c}>
-                {c}
+                {categoryLabels[c]}
               </option>
             ))}
           </select>
         </label>
 
         <label className="block">
-          <span className="text-sm font-medium text-stone-700">Color</span>
-          <input
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            placeholder="Ej: Blanco"
-            className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-400"
-          />
+          <span className="text-sm font-medium text-stone-700">Colores</span>
+          <div className="mt-2 rounded-2xl border border-stone-200 bg-white px-3 py-2">
+            <div className="flex flex-wrap gap-2">
+              {colors.map((c) => (
+                <span
+                  key={c}
+                  className="inline-flex items-center gap-2 rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-700"
+                >
+                  {c}
+                  <button
+                    type="button"
+                    onClick={() => removeColor(c)}
+                    className="rounded-full p-1 text-stone-500 hover:bg-white"
+                    aria-label={`Quitar color ${c}`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+            <div className="mt-2 flex gap-2">
+              <input
+                value={colorInput}
+                onChange={(e) => setColorInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === ",") {
+                    e.preventDefault();
+                    addColor(colorInput);
+                    setColorInput("");
+                  }
+                }}
+                placeholder="Ej: Blanco (Enter para añadir)"
+                className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-stone-400"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  addColor(colorInput);
+                  setColorInput("");
+                }}
+                className="shrink-0 rounded-xl bg-stone-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-stone-700"
+              >
+                Añadir
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-stone-500">
+              Puedes añadir varios colores (útil para prendas bicolor o estampadas).
+            </p>
+          </div>
         </label>
 
         <label className="block">
@@ -200,7 +283,7 @@ export function GarmentForm() {
                     : "border-stone-200 bg-white text-stone-700 hover:bg-stone-50",
                 ].join(" ")}
               >
-                {s}
+                {seasonLabels[s]}
               </button>
             ))}
           </div>
@@ -221,7 +304,7 @@ export function GarmentForm() {
                     : "border-stone-200 bg-white text-stone-700 hover:bg-stone-50",
                 ].join(" ")}
               >
-                {o}
+                {occasionLabels[o]}
               </button>
             ))}
           </div>
@@ -246,7 +329,12 @@ export function GarmentForm() {
 
       <button
         type="button"
-        disabled={loading || seeding || name.trim().length < 2 || color.trim().length < 1}
+        disabled={
+          loading ||
+          seeding ||
+          name.trim().length < 2 ||
+          (colors.length === 0 && colorInput.trim().length < 1)
+        }
         onClick={() => void onSubmit()}
         className="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
