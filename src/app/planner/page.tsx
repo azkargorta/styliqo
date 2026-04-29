@@ -1,55 +1,29 @@
 import { AppShell } from "@/components/app-shell";
-import { SectionCard } from "@/components/section-card";
-import { outfits, plannerEntries } from "@/lib/mock-data";
+import { PlannerCalendar } from "@/components/planner-calendar";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function PlannerPage() {
+export default async function PlannerPage() {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) redirect("/sign-in");
+
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) redirect("/sign-in");
+
+  const [{ data: outfits }, { data: entries }] = await Promise.all([
+    supabase.from("outfits").select("id,name").order("created_at", { ascending: false }),
+    supabase
+      .from("planner_entries")
+      .select("id,date,title,outfit_id,weather,notes")
+      .order("date", { ascending: true }),
+  ]);
+
   return (
     <AppShell
       title="Planificador"
       description="Calendario operativo para decidir qué ponerse por día, reutilizando conjuntos guardados y contexto meteorológico."
     >
-      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <SectionCard
-          eyebrow="Semana"
-          title="Eventos programados"
-          description="Cada entrada puede asociarse a un outfit, estado del clima, notas y un recordatorio futuro."
-        >
-          <div className="space-y-3">
-            {plannerEntries.map((entry) => {
-              const linkedOutfit = outfits.find((outfit) => outfit.id === entry.outfitId);
-
-              return (
-                <div key={entry.id} className="rounded-3xl bg-white p-5 shadow-sm shadow-stone-200/50">
-                  <p className="text-sm font-medium text-stone-500">{entry.date}</p>
-                  <h2 className="mt-2 text-lg font-semibold text-stone-900">{entry.title}</h2>
-                  <p className="mt-2 text-sm text-stone-600">
-                    Conjunto: {linkedOutfit?.name ?? "Sin asignar"} · {entry.weather}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </SectionCard>
-
-        <SectionCard
-          eyebrow="Roadmap"
-          title="Capacidades listas para la siguiente iteración"
-          description="El módulo ya queda preparado para evolucionar a calendario completo y sugerencia automática de conjunto."
-        >
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              "Arrastrar conjuntos a una fecha concreta.",
-              "Recomendación automática según clima y ocasión.",
-              "Vista mensual y semanal responsive.",
-              "Replanificación rápida si una prenda está en lavandería o no disponible.",
-            ].map((item) => (
-              <div key={item} className="rounded-3xl bg-stone-100 p-4 text-sm leading-6 text-stone-700">
-                {item}
-              </div>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
+      <PlannerCalendar outfits={outfits ?? []} entries={entries ?? []} />
     </AppShell>
   );
 }

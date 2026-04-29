@@ -11,19 +11,18 @@ export default function OutfitsPage() {
     >
       <div className="grid gap-6 xl:grid-cols-[1fr_0.95fr]">
         <SectionCard
-          eyebrow="Builder"
-          title="Composición manual"
-          description="La siguiente iteración puede reemplazar este preview por drag and drop o selección contextual por categoría."
+          eyebrow="Demo"
+          title="Crear conjuntos"
+          description="En esta iteración, puedes cargar conjuntos demo desde el servidor para probar el planificador. El editor visual completo lo implementamos después."
         >
-          <div className="grid gap-4 sm:grid-cols-2">
-            {garments.map((garment) => (
-              <div key={garment.id} className="rounded-3xl bg-stone-100 p-4">
-                <p className="text-sm font-medium text-stone-900">{garment.name}</p>
-                <p className="mt-1 text-sm text-stone-600">
-                  {garment.category} · {garment.color}
-                </p>
-              </div>
-            ))}
+          <div className="rounded-3xl bg-stone-100 p-5 text-sm text-stone-700">
+            Para probar asignaciones en el planificador, puedes crear conjuntos demo con este endpoint:
+            <div className="mt-3 rounded-2xl bg-white p-4 font-mono text-xs text-stone-800">
+              POST /api/outfits/seed-demo
+            </div>
+            <p className="mt-3 text-sm text-stone-600">
+              Después, recarga esta página y el planificador para verlos en el selector.
+            </p>
           </div>
         </SectionCard>
 

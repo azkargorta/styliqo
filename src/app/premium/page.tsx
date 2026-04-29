@@ -2,6 +2,7 @@ import { AppShell } from "@/components/app-shell";
 import { SectionCard } from "@/components/section-card";
 import { profile } from "@/lib/mock-data";
 import { AiGenerator } from "@/components/ai-generator";
+import { Collapsible } from "@/components/collapsible";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -63,7 +64,15 @@ export default async function PremiumPage() {
           title="Sugerencias generadas"
           description="El asistente personal devuelve conjuntos explicados y convertibles a conjuntos guardables."
         >
-          <AiGenerator />
+          <Collapsible
+            title="Generar conjunto"
+            description="Define ocasión, temporada, clima y estado de ánimo."
+            defaultOpen={false}
+            actionLabelClosed="Abrir asistente"
+            actionLabelOpen="Cerrar"
+          >
+            <AiGenerator />
+          </Collapsible>
         </SectionCard>
       </div>
     </AppShell>

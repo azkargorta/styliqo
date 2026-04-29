@@ -1,8 +1,9 @@
-import Image from "next/image";
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/empty-state";
 import { SectionCard } from "@/components/section-card";
 import { GarmentForm } from "@/components/garment-form";
+import { Collapsible } from "@/components/collapsible";
+import { WardrobeGallery } from "@/components/wardrobe/wardrobe-gallery";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import type { Garment, Occasion, Season } from "@/types/domain";
 import { redirect } from "next/navigation";
@@ -65,11 +66,19 @@ export default async function WardrobePage() {
     >
       <div className="grid gap-6">
         <SectionCard
-          eyebrow="Supabase"
-          title="Añade tus primeras prendas"
-          description="Este formulario guarda tu prenda en la BD. Con al menos 1 prenda, el asistente personal premium podrá generar conjuntos basados en tus IDs."
+          eyebrow="Armario"
+          title="Añadir prenda"
+          description="Guarda una prenda en tu base de datos. Con al menos 1 prenda, el asistente personal podrá generar conjuntos basados en tu armario."
         >
-          <GarmentForm />
+          <Collapsible
+            title="Formulario de alta"
+            description="Sube lo mínimo (nombre, categoría, color) y completa el resto cuando quieras."
+            defaultOpen={false}
+            actionLabelClosed="Abrir formulario"
+            actionLabelOpen="Cerrar"
+          >
+            <GarmentForm />
+          </Collapsible>
         </SectionCard>
 
         <SectionCard
@@ -94,49 +103,10 @@ export default async function WardrobePage() {
         <SectionCard
           eyebrow="Inventario"
           title="Prendas guardadas"
-          description="Vista inicial preparada para transformarse en un grid conectado a base de datos con filtros por color, categoría, estación y ocasión."
+          description="Marca tus favoritas, sepáralas por estación y filtra para encontrar lo que necesitas rápido."
         >
           {garmentsList.length ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {garmentsList.map((garment) => (
-                <article key={garment.id} className="overflow-hidden rounded-3xl border border-stone-200 bg-white">
-                  <div className="relative h-64 bg-stone-200">
-                    <Image
-                      src={garment.imageUrl}
-                      alt={garment.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1280px) 50vw, 33vw"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h2 className="text-lg font-semibold text-stone-900">{garment.name}</h2>
-                        <p className="mt-1 text-sm text-stone-600">
-                          {garment.brand} · {garment.color}
-                        </p>
-                      </div>
-                      {garment.favorite ? (
-                        <span className="rounded-full bg-stone-900 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
-                          Favorita
-                        </span>
-                      ) : null}
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {garment.season.map((season) => (
-                        <span
-                          key={season}
-                          className="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600"
-                        >
-                          {season}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <WardrobeGallery garments={garmentsList} />
           ) : (
             <EmptyState
               title="Todavía no tienes prendas"

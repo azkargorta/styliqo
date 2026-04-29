@@ -82,11 +82,11 @@ export function AiGenerator() {
             onChange={(e) => setInput((prev) => ({ ...prev, occasion: e.target.value as AiRecommendationInput["occasion"] }))}
             className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-400"
           >
-            <option value="daily">daily</option>
-            <option value="office">office</option>
-            <option value="event">event</option>
-            <option value="travel">travel</option>
-            <option value="sport">sport</option>
+            <option value="daily">Diario</option>
+            <option value="office">Oficina</option>
+            <option value="event">Evento</option>
+            <option value="travel">Viaje</option>
+            <option value="sport">Deporte</option>
           </select>
         </label>
 
@@ -97,10 +97,10 @@ export function AiGenerator() {
             onChange={(e) => setInput((prev) => ({ ...prev, season: e.target.value as AiRecommendationInput["season"] }))}
             className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-400"
           >
-            <option value="spring">spring</option>
-            <option value="summer">summer</option>
-            <option value="autumn">autumn</option>
-            <option value="winter">winter</option>
+            <option value="spring">Primavera</option>
+            <option value="summer">Verano</option>
+            <option value="autumn">Otoño</option>
+            <option value="winter">Invierno</option>
           </select>
         </label>
 
@@ -115,7 +115,7 @@ export function AiGenerator() {
         </label>
 
         <label className="block sm:col-span-2">
-          <span className="text-sm font-medium text-stone-700">Mood</span>
+          <span className="text-sm font-medium text-stone-700">Estado de ánimo</span>
           <input
             value={input.mood}
             onChange={(e) => setInput((prev) => ({ ...prev, mood: e.target.value }))}
