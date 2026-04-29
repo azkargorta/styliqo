@@ -1,16 +1,9 @@
 import { AppShell } from "@/components/app-shell";
 import { SectionCard } from "@/components/section-card";
 import { profile } from "@/lib/mock-data";
-import { getPremiumRecommendations } from "@/lib/ai/recommendations";
+import { AiGenerator } from "@/components/ai-generator";
 
-export default async function PremiumPage() {
-  const recommendations = await getPremiumRecommendations({
-    occasion: "office",
-    season: "spring",
-    weather: "18C y nubes ligeras",
-    mood: "seguro",
-  });
-
+export default function PremiumPage() {
   const remainingCredits = profile.monthlyAiCredits - profile.usedAiCredits;
 
   return (
@@ -62,28 +55,7 @@ export default async function PremiumPage() {
           title="Sugerencias generadas"
           description="La capa de IA devuelve looks explicados y convertibles a outfits guardables. Hoy usa un proveedor local de ejemplo para no depender de claves durante el bootstrap."
         >
-          <div className="grid gap-4 lg:grid-cols-2">
-            {recommendations.map((recommendation) => (
-              <article key={recommendation.title} className="rounded-3xl bg-white p-5 shadow-sm shadow-stone-200/50">
-                <h2 className="text-lg font-semibold text-stone-900">{recommendation.title}</h2>
-                <p className="mt-3 text-sm leading-6 text-stone-600">
-                  {recommendation.rationale}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {recommendation.garments.map((garment) =>
-                    garment ? (
-                      <span
-                        key={garment.id}
-                        className="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-700"
-                      >
-                        {garment.name}
-                      </span>
-                    ) : null,
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
+          <AiGenerator />
         </SectionCard>
       </div>
     </AppShell>

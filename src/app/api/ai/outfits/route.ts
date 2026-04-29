@@ -10,14 +10,22 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const body = bodySchema.parse(await request.json());
-  const recommendations = await getPremiumRecommendations(body);
+  try {
+    const body = bodySchema.parse(await request.json());
+    const recommendations = await getPremiumRecommendations(body);
 
-  return NextResponse.json({
-    data: recommendations,
-    meta: {
-      source: "local-fallback-provider",
-      premiumRequired: true,
-    },
-  });
+    return NextResponse.json({
+      data: recommendations,
+      meta: {
+        premiumRequired: true,
+      },
+    });
+  } catch (e) {
+    return NextResponse.json(
+      {
+        error: e instanceof Error ? e.message : "Error generando recomendaciones",
+      },
+      { status: 500 },
+    );
+  }
 }

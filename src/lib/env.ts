@@ -9,7 +9,8 @@ export const env = {
   supabaseServiceRoleKey: readEnv("SUPABASE_SERVICE_ROLE_KEY"),
   stripeSecretKey: readEnv("STRIPE_SECRET_KEY"),
   stripePriceId: readEnv("STRIPE_PREMIUM_PRICE_ID"),
-  openAiApiKey: readEnv("OPENAI_API_KEY"),
+  geminiApiKey: readEnv("GEMINI_API_KEY"),
+  geminiModel: readEnv("GEMINI_MODEL") ?? "gemini-1.5-flash",
 };
 
 export function hasSupabaseEnv() {
@@ -21,5 +22,5 @@ export function hasStripeEnv() {
 }
 
 export function hasAiEnv() {
-  return Boolean(env.openAiApiKey);
+  return Boolean(env.geminiApiKey);
 }
