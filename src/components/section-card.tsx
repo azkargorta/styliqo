@@ -19,13 +19,13 @@ export function SectionCard({
   return (
     <section
       className={clsx(
-        "rounded-3xl border border-stone-200 bg-white p-6 shadow-sm shadow-stone-200/50",
+        "rounded-[1.75rem] border border-border bg-surface p-6 shadow-sm shadow-stone-200/40",
         className,
       )}
     >
       <div className="mb-5">
         {eyebrow ? (
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
             {eyebrow}
           </p>
         ) : null}

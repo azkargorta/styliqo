@@ -20,7 +20,9 @@ export default function SignInPage() {
 
   async function onSubmit() {
     if (!supabase) {
-      setMessage("Supabase no está configurado. Revisa variables de entorno.");
+      setMessage(
+        "Supabase no está configurado en el navegador. Revisa `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` en `.env.local` y reinicia `npm run dev`.",
+      );
       return;
     }
 

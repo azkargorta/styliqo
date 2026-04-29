@@ -4,9 +4,9 @@ import { SectionCard } from "@/components/section-card";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-stone-100 px-4 py-6 text-stone-900 lg:px-8">
+    <main className="min-h-screen bg-background styliqo-bg px-4 py-6 text-stone-900 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <section className="overflow-hidden rounded-[2rem] bg-stone-900 p-8 text-white shadow-xl shadow-stone-300/60 lg:p-12">
+        <section className="overflow-hidden rounded-[2rem] bg-stone-950 p-8 text-white shadow-xl shadow-stone-300/60 lg:p-12">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
             <div>
               <p className="text-sm font-medium uppercase tracking-[0.28em] text-stone-300">
@@ -22,7 +22,7 @@ export default function Home() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-stone-900 transition hover:bg-stone-200"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand800"
                 >
                   Ver dashboard
                   <ArrowRight className="h-4 w-4" />
