@@ -13,6 +13,7 @@ export function GarmentForm() {
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState<(typeof categories)[number]>("tops");
   const [color, setColor] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
   const [notes, setNotes] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedSeasons, setSelectedSeasons] = useState<Season[]>(["spring"]);
@@ -31,19 +32,20 @@ export function GarmentForm() {
     setLoading(true);
 
     try {
+      const form = new FormData();
+      form.set("name", name);
+      form.set("category", category);
+      form.set("color", color.trim());
+      if (brand.trim()) form.set("brand", brand.trim());
+      if (notes.trim()) form.set("notes", notes.trim());
+      form.set("isFavorite", String(isFavorite));
+      selectedSeasons.forEach((s) => form.append("seasons", s));
+      selectedOccasions.forEach((o) => form.append("occasions", o));
+      if (photo) form.set("photo", photo);
+
       const res = await fetch("/api/wardrobe/garments", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          name,
-          brand: brand.trim() ? brand.trim() : undefined,
-          category,
-          color: color.trim(),
-          notes: notes.trim() ? notes.trim() : undefined,
-          seasons: selectedSeasons,
-          occasions: selectedOccasions,
-          isFavorite,
-        }),
+        body: form,
       });
 
       const json = await res.json().catch(() => ({}));
@@ -55,6 +57,7 @@ export function GarmentForm() {
       setName("");
       setBrand("");
       setColor("");
+      setPhoto(null);
       setNotes("");
       setIsFavorite(false);
       setSelectedSeasons(["spring"]);
@@ -112,6 +115,19 @@ export function GarmentForm() {
       </div>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <label className="block sm:col-span-2">
+          <span className="text-sm font-medium text-stone-700">Foto</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
+            className="mt-2 w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-400"
+          />
+          <p className="mt-2 text-xs text-stone-500">
+            Recomendado: JPG/PNG. Se guardará en tu Storage de Supabase.
+          </p>
+        </label>
+
         <label className="block sm:col-span-2">
           <span className="text-sm font-medium text-stone-700">Nombre</span>
           <input

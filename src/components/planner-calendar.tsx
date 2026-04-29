@@ -162,29 +162,32 @@ export function PlannerCalendar({
               const dayEntries = entriesByDate.get(key) ?? [];
 
               return (
-                <div key={key} className="rounded-[1.25rem] border border-border bg-surfaceMuted p-4">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
+                <div
+                  key={key}
+                  className="relative rounded-[1.25rem] border border-border bg-surfaceMuted p-4"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpenDate(key);
+                      setTitle("");
+                      setSelectedOutfitId("");
+                      setError(null);
+                    }}
+                    className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-stone-900 shadow-sm shadow-stone-200/40 transition hover:bg-stone-100"
+                    aria-label="Añadir evento"
+                    title="Añadir"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+
+                  <div className="min-w-0 pr-10">
                       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
                         {format(day, "EEE", { locale: es })}
                       </p>
                       <p className="mt-1 text-sm font-semibold text-stone-950">
                         {format(day, "d MMM", { locale: es })}
                       </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenDate(key);
-                        setTitle("");
-                        setSelectedOutfitId("");
-                        setError(null);
-                      }}
-                      className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-semibold text-stone-900 transition hover:bg-stone-100"
-                    >
-                      <Plus className="h-4 w-4" />
-                      <span className="hidden lg:inline">Añadir</span>
-                    </button>
                   </div>
 
                   <div className="mt-4 space-y-2">

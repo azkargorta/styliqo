@@ -5,6 +5,7 @@ import { GarmentForm } from "@/components/garment-form";
 import { Collapsible } from "@/components/collapsible";
 import { WardrobeGallery } from "@/components/wardrobe/wardrobe-gallery";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getSupabaseServiceRoleClient } from "@/lib/supabase/admin";
 import type { Garment, Occasion, Season } from "@/types/domain";
 import { redirect } from "next/navigation";
 
@@ -15,7 +16,7 @@ const categorySet = new Set<Garment["category"]>(["tops", "bottoms", "outerwear"
 const placeholderImageUrl =
   "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=900&q=80";
 
-function mapGarmentRow(row: Record<string, unknown>): Garment | null {
+function mapGarmentRow(row: Record<string, unknown>, imageUrl?: string): Garment | null {
   const category = row.category as Garment["category"];
   if (!categorySet.has(category)) return null;
 
@@ -34,7 +35,7 @@ function mapGarmentRow(row: Record<string, unknown>): Garment | null {
     season,
     occasion,
     brand: (row.brand as string | null | undefined) ?? "",
-    imageUrl: placeholderImageUrl,
+    imageUrl: imageUrl ?? placeholderImageUrl,
     notes: (row.notes as string | null | undefined) ?? undefined,
     favorite: Boolean(row.is_favorite),
   };
@@ -57,7 +58,30 @@ export default async function WardrobePage() {
     // en vez de romper toda la página.
   }
 
-  const garmentsList = (garmentRows ?? []).map(mapGarmentRow).filter(Boolean) as Garment[];
+  const admin = getSupabaseServiceRoleClient();
+  const garmentIds = (garmentRows ?? []).map((g) => g.id as string).filter(Boolean);
+
+  const imageUrlByGarmentId = new Map<string, string>();
+  if (admin && garmentIds.length) {
+    const { data: images } = await admin
+      .from("garment_images")
+      .select("garment_id,storage_path")
+      .in("garment_id", garmentIds);
+
+    for (const row of images ?? []) {
+      const garmentId = row.garment_id as string;
+      if (imageUrlByGarmentId.has(garmentId)) continue;
+      const storagePath = row.storage_path as string;
+      const signed = await admin.storage.from("garments").createSignedUrl(storagePath, 60 * 60 * 24);
+      if (!signed.error && signed.data?.signedUrl) {
+        imageUrlByGarmentId.set(garmentId, signed.data.signedUrl);
+      }
+    }
+  }
+
+  const garmentsList = (garmentRows ?? [])
+    .map((row) => mapGarmentRow(row, imageUrlByGarmentId.get(row.id as string)))
+    .filter(Boolean) as Garment[];
 
   return (
     <AppShell
