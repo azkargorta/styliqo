@@ -36,7 +36,7 @@ export function GarmentForm() {
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState<(typeof categories)[number]>("tops");
   const [colors, setColors] = useState<string[]>([]);
-  const [colorInput, setColorInput] = useState("");
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [photo, setPhoto] = useState<File | null>(null);
   const [notes, setNotes] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -70,12 +70,7 @@ export function GarmentForm() {
       const form = new FormData();
       form.set("name", name);
       form.set("category", category);
-      const normalizedColors = colors.length
-        ? colors
-        : colorInput.trim()
-          ? [colorInput.trim()]
-          : [];
-      form.set("color", normalizedColors.join(", "));
+      form.set("color", colors.join(", "));
       if (brand.trim()) form.set("brand", brand.trim());
       if (notes.trim()) form.set("notes", notes.trim());
       form.set("isFavorite", String(isFavorite));
@@ -97,7 +92,7 @@ export function GarmentForm() {
       setName("");
       setBrand("");
       setColors([]);
-      setColorInput("");
+      setColorPickerOpen(false);
       setPhoto(null);
       setNotes("");
       setIsFavorite(false);
@@ -215,30 +210,74 @@ export function GarmentForm() {
                 </span>
               ))}
             </div>
-            <div className="mt-2 flex gap-2">
-              <input
-                value={colorInput}
-                onChange={(e) => setColorInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === ",") {
-                    e.preventDefault();
-                    addColor(colorInput);
-                    setColorInput("");
-                  }
-                }}
-                placeholder="Ej: Blanco (Enter para añadir)"
-                className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-stone-400"
-              />
+            <div className="relative mt-2">
               <button
                 type="button"
-                onClick={() => {
-                  addColor(colorInput);
-                  setColorInput("");
-                }}
-                className="shrink-0 rounded-xl bg-stone-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-stone-700"
+                onClick={() => setColorPickerOpen((v) => !v)}
+                className="flex w-full items-center justify-between rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm font-semibold text-stone-900 transition hover:bg-stone-50"
               >
-                Añadir
+                <span>{colorPickerOpen ? "Cerrar colores" : "Seleccionar colores"}</span>
+                <span className="text-xs font-semibold text-stone-500">
+                  {colors.length ? `${colors.length} seleccionados` : "0 seleccionados"}
+                </span>
               </button>
+
+              {colorPickerOpen ? (
+                <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-lg">
+                  <div className="max-h-56 overflow-auto p-2">
+                    {[
+                      "Blanco",
+                      "Negro",
+                      "Gris",
+                      "Beige",
+                      "Marrón",
+                      "Camel",
+                      "Azul marino",
+                      "Azul",
+                      "Verde",
+                      "Oliva",
+                      "Rojo",
+                      "Granate",
+                      "Rosa",
+                      "Morado",
+                      "Naranja",
+                      "Amarillo",
+                      "Dorado",
+                      "Plateado",
+                      "Multicolor",
+                      "Estampado",
+                    ].map((label) => {
+                      const selected = colors.includes(label);
+                      return (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={() => {
+                            if (selected) removeColor(label);
+                            else addColor(label);
+                          }}
+                          className={[
+                            "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition",
+                            selected
+                              ? "bg-brand/10 text-stone-950 ring-1 ring-brand/15"
+                              : "text-stone-700 hover:bg-stone-50",
+                          ].join(" ")}
+                        >
+                          <span>{label}</span>
+                          <span
+                            className={[
+                              "rounded-full px-2 py-1 text-[11px] font-semibold",
+                              selected ? "bg-brand text-white" : "bg-stone-100 text-stone-600",
+                            ].join(" ")}
+                          >
+                            {selected ? "Añadido" : "Añadir"}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
             </div>
             <p className="mt-2 text-xs text-stone-500">
               Puedes añadir varios colores (útil para prendas bicolor o estampadas).
@@ -333,7 +372,7 @@ export function GarmentForm() {
           loading ||
           seeding ||
           name.trim().length < 2 ||
-          (colors.length === 0 && colorInput.trim().length < 1)
+          colors.length === 0
         }
         onClick={() => void onSubmit()}
         className="mt-5 w-full rounded-2xl bg-stone-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60"
