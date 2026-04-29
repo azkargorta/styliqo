@@ -136,7 +136,7 @@ export function AiGenerator() {
           {loading ? "Generando..." : "Generar"}
         </button>
         <p className="text-sm text-stone-500">
-          Consejo: si el armario aún no está conectado, usa el dataset de ejemplo para validar Gemini.
+          Si te aparece un error, añade al menos 1 prenda en `Armario` antes de generar.
         </p>
       </div>
 

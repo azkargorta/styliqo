@@ -1,5 +1,5 @@
 import { garments, outfits, plannerEntries, profile, wishlistItems } from "@/lib/mock-data";
-import { getSupabaseServerClient } from "@/lib/supabase/client";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function getDashboardSnapshot() {
   const supabase = getSupabaseServerClient();

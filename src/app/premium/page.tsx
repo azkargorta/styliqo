@@ -2,8 +2,16 @@ import { AppShell } from "@/components/app-shell";
 import { SectionCard } from "@/components/section-card";
 import { profile } from "@/lib/mock-data";
 import { AiGenerator } from "@/components/ai-generator";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function PremiumPage() {
+export default async function PremiumPage() {
+  const supabase = getSupabaseServerClient();
+  if (!supabase) redirect("/sign-in");
+
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) redirect("/sign-in");
+
   const remainingCredits = profile.monthlyAiCredits - profile.usedAiCredits;
 
   return (
