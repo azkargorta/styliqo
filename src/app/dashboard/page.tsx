@@ -40,14 +40,14 @@ export default function DashboardPage() {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/premium"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand800"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-black/25 ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:bg-brand800 hover:ring-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 active:translate-y-0"
               >
                 Abrir asistente personal
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/planner"
-                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white ring-1 ring-transparent transition hover:-translate-y-0.5 hover:bg-white/10 hover:ring-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 active:translate-y-0"
               >
                 Ir al planificador
               </Link>
