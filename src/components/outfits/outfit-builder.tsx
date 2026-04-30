@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import clsx from "clsx";
 import { Check, Pencil, Plus, Trash2 } from "lucide-react";
 import { Collapsible } from "@/components/collapsible";
@@ -49,6 +50,17 @@ const categoryLabels: Record<string, string> = {
   accessories: "Accesorios",
 };
 
+const guidedRequiredCategories = ["tops", "bottoms", "footwear"] as const;
+const guidedOptionalCategories = ["outerwear"] as const;
+
+const categoryPriority: Record<string, number> = {
+  tops: 10,
+  bottoms: 20,
+  outerwear: 30,
+  footwear: 40,
+  accessories: 50,
+};
+
 function uniq<T>(arr: T[]) {
   return Array.from(new Set(arr));
 }
@@ -66,6 +78,7 @@ export function OutfitBuilder({
   const [season, setSeason] = useState("spring");
   const [notes, setNotes] = useState("");
   const [selectedGarmentIds, setSelectedGarmentIds] = useState<string[]>([]);
+  const [guidedMode, setGuidedMode] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,6 +100,21 @@ export function OutfitBuilder({
     const byId = new Map(garments.map((g) => [g.id, g] as const));
     return selectedGarmentIds.map((id) => byId.get(id)).filter(Boolean) as GarmentLite[];
   }, [garments, selectedGarmentIds]);
+
+  const selectedByCategory = useMemo(() => {
+    const map = new Map<string, GarmentLite[]>();
+    selectedGarments.forEach((g) => {
+      const list = map.get(g.category) ?? [];
+      list.push(g);
+      map.set(g.category, list);
+    });
+    return map;
+  }, [selectedGarments]);
+
+  const guidedMissing = useMemo(() => {
+    if (!guidedMode) return [];
+    return guidedRequiredCategories.filter((cat) => !(selectedByCategory.get(cat)?.length));
+  }, [guidedMode, selectedByCategory]);
 
   function resetForm() {
     setActiveId(null);
@@ -114,21 +142,60 @@ export function OutfitBuilder({
   }
 
   function toggleGarment(id: string) {
-    setSelectedGarmentIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
+    setSelectedGarmentIds((prev) => {
+      const isSelected = prev.includes(id);
+      if (isSelected) return prev.filter((x) => x !== id);
+
+      if (!guidedMode) return [...prev, id];
+
+      const g = garments.find((x) => x.id === id);
+      if (!g) return prev;
+
+      const isSingleSelectCategory =
+        guidedRequiredCategories.includes(g.category as (typeof guidedRequiredCategories)[number]) ||
+        guidedOptionalCategories.includes(g.category as (typeof guidedOptionalCategories)[number]);
+
+      if (!isSingleSelectCategory) return [...prev, id];
+
+      const idsInSameCategory = garments
+        .filter((x) => x.category === g.category)
+        .map((x) => x.id);
+
+      const withoutSameCategory = prev.filter((x) => !idsInSameCategory.includes(x));
+      return [...withoutSameCategory, id];
+    });
   }
 
   async function onSave() {
     setBusy(true);
     setError(null);
     try {
+      if (guidedMode && guidedMissing.length) {
+        throw new Error(
+          `Faltan categorías obligatorias: ${guidedMissing
+            .map((c) => categoryLabels[c] ?? c)
+            .join(", ")}.`,
+        );
+      }
+
+      const byId = new Map(garments.map((g) => [g.id, g] as const));
+      const orderedGarmentIds = selectedGarmentIds
+        .slice()
+        .sort((a, b) => {
+          const ga = byId.get(a);
+          const gb = byId.get(b);
+          const pa = ga ? categoryPriority[ga.category] ?? 1000 : 1000;
+          const pb = gb ? categoryPriority[gb.category] ?? 1000 : 1000;
+          if (pa !== pb) return pa - pb;
+          return (ga?.name ?? "").localeCompare(gb?.name ?? "");
+        });
+
       const payload = {
         name: name.trim(),
         occasion,
         season,
         notes: notes.trim() ? notes.trim() : undefined,
-        garmentIds: selectedGarmentIds,
+        garmentIds: orderedGarmentIds,
       };
 
       const res = await fetch(activeId ? `/api/outfits/${activeId}` : "/api/outfits", {
@@ -226,8 +293,24 @@ export function OutfitBuilder({
           </div>
 
           <div className="mt-5 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
+                Prendas
+              </p>
+              <label className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-xs font-semibold text-stone-900">
+                <input
+                  type="checkbox"
+                  checked={guidedMode}
+                  onChange={(e) => setGuidedMode(e.target.checked)}
+                />
+                Constructor guiado
+              </label>
+            </div>
+
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-stone-500">
-              Prendas
+              {guidedMode
+                ? "1 top + 1 pantalón + 1 calzado (capa opcional)"
+                : "Selección libre"}
             </p>
             {categoriesInWardrobe.length ? (
               <div className="space-y-4">
@@ -284,6 +367,14 @@ export function OutfitBuilder({
                   <p className="text-sm text-stone-500">Selecciona al menos 1 prenda.</p>
                 )}
               </div>
+              {guidedMode && guidedMissing.length ? (
+                <p className="mt-3 text-sm text-stone-600">
+                  Te falta:{" "}
+                  <span className="font-semibold text-stone-900">
+                    {guidedMissing.map((c) => categoryLabels[c] ?? c).join(", ")}
+                  </span>
+                </p>
+              ) : null}
             </div>
 
             {error ? (
@@ -302,7 +393,12 @@ export function OutfitBuilder({
               </button>
               <button
                 type="button"
-                disabled={busy || name.trim().length < 2 || selectedGarmentIds.length === 0}
+                disabled={
+                  busy ||
+                  name.trim().length < 2 ||
+                  selectedGarmentIds.length === 0 ||
+                  (guidedMode && guidedMissing.length > 0)
+                }
                 onClick={() => void onSave()}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand800 disabled:cursor-not-allowed disabled:opacity-60"
               >
@@ -349,6 +445,12 @@ export function OutfitBuilder({
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
+                    <Link
+                      href={`/outfits/${o.id}`}
+                      className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-2 text-xs font-semibold text-stone-900 transition hover:bg-stone-50"
+                    >
+                      Ver
+                    </Link>
                     <button
                       type="button"
                       onClick={() => loadOutfit(o)}
